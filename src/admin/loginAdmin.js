@@ -1,32 +1,40 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {useForm} from "react-hook-form"
-import { API_URL, TOKEN_KEY } from '../services/apiService';
+import { API_URL, TOKEN_KEY, doApiMethod } from '../services/apiService';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function LoginAdmin() {
   const{register , handleSubmit ,  formState: { errors } } = useForm();
   const nav = useNavigate();
+
+
+  useEffect(() => {
+    if(localStorage[TOKEN_KEY]){
+      localStorage.removeItem(TOKEN_KEY)
+      // לבדוק אם זו הדרך הכי נכונה לרנדר מחדש את הדפדפן
+      // nav("/admin")
+    }
+  
+  },[])
+
 
   const onSub = (_bodyData) => {
     console.log(_bodyData)
     doApiPost(_bodyData)
   }
 
+
   const doApiPost = async (_bodyData) => { 
     try{
       const url = API_URL + "/users/logIn";
-      const resp = await axios({
-       method: "POST",
-       url: url ,
-       data: _bodyData
-      })
-
+      const resp = await doApiMethod(url, "POST", _bodyData)
       
-
-      if(resp.data.token){
-        if(resp.data.role == "admin"){
-          localStorage.setItem(TOKEN_KEY, resp.data.token)
+      if(resp.token){
+        if(resp.role == "admin"){
+          localStorage.setItem(TOKEN_KEY, resp.token)
+          toast.success('Welcome, you login.');
             nav("/admin/users")
         }else{
           alert("this place for admin");
@@ -35,7 +43,7 @@ export default function LoginAdmin() {
        
       }
    
-      console.log(resp.data);
+      console.log(resp);
     }
     catch(err){
        console.log(err);

@@ -1,3 +1,21 @@
+.leaflet-container {
+  width: 100% ;
+  height: 60vh;
+  
+}
+
+.div-arCity {
+  cursor: pointer;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.div-arCity:hover {
+background-color: gray;
+}
+
+
 header{
   /* כדי שנוכל לתת זיד אינדקס חובה לתת גם מאפיין
   פוזישן כלשהו, ואם אנחנו לא רוצים בטעות להשפיע על
